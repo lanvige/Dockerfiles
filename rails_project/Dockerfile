@@ -24,10 +24,15 @@ RUN chmod +x /usr/bin/rails-start
 WORKDIR /app
 RUN bundle install --without development test
 
+# Build for rails
+RUN bundle exec rake assets:precompile
+RUN bundle exec rake db:create
+RUN bundle exec rake db:migrate 
+
 # Add default unicorn config
 ADD ./config/unicorn.rb /app/config/unicorn.rb
 
 EXPOSE 8080
 
 
-ENTRYPOINT /usr/bin/start-server
+ENTRYPOINT /usr/bin/rails-start
