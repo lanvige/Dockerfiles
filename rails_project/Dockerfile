@@ -14,15 +14,20 @@ RUN apt-get -y install sqlite3 libsqlite3-dev
 
 ENV RAILS_ENV production
 
-ADD .app /app
+ADD ./app /app
+
+ADD ./scripts/rails-start.sh /usr/bin/rails-start
+RUN chmod +x /usr/bin/rails-start
+
 
 # Install Rails App
 WORKDIR /app
 RUN bundle install --without development test
 
 # Add default unicorn config
-ADD unicorn.rb /app/config/unicorn.rb
+ADD ./config/unicorn.rb /app/config/unicorn.rb
 
 EXPOSE 8080
 
-CMD bundle exec rake assets:precompile && bundle exec unicorn -p 8080 -c config/unicorn.rb
+
+ENTRYPOINT /usr/bin/start-server
