@@ -1,13 +1,14 @@
 # Rails Dockerfile
 # VERSION   0.5
 
-MAINTAINER Lanvige Jiang 'lanvige@gmail.com'
-
 # Use phusion/baseimage as base image. To make your builds reproducible, make
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
 FROM phusion/baseimage:latest
+
+
+MAINTAINER Lanvige Jiang 'lanvige@gmail.com'
 
 # Replace with 163 source
 RUN echo "deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse" > /etc/apt/sources.list
