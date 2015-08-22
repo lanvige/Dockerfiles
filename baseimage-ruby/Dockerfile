@@ -26,27 +26,37 @@ RUN rm -f /etc/service/sshd/down
 # Use a version available on the Brightbox repo (https://www.brightbox.com/docs/ruby/ubuntu/)
 ENV RUBY_VERSION 2.2
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C3173AA6 && \
-    echo deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu trusty main > /etc/apt/sources.list.d/brightbox-ruby-ng-trusty.list && \
-    apt-get update -q && apt-get install -yq --no-install-recommends \
-        ca-certificates \
-        openssl \
-        libssl-dev \
-        g++ \
-        gcc \
-        libc6-dev \
-        make \
-        patch \
-        ruby$RUBY_VERSION \
-        ruby$RUBY_VERSION-dev && \
+ENV RUBY_MAJOR 2.2
+ENV RUBY_VERSION 2.2.2
 
-    # clean up
-    rm -rf /var/lib/apt/lists/* && \
-    truncate -s 0 /var/log/*log && \
+# some of ruby's build scripts are written in ruby
+# we purge this later to make sure our final image uses what we just built
+RUN apt-get update \
+    && apt-get install -y bison ruby \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /usr/src/ruby \
+    && curl -SL "http://cache.ruby-lang.org/pub/ruby/$RUBY_MAJOR/ruby-$RUBY_VERSION.tar.bz2" \
+        | tar -xjC /usr/src/ruby --strip-components=1 \
+    && cd /usr/src/ruby \
+    && autoconf \
+    && ./configure --disable-install-doc \
+    && make -j"$(nproc)" \
+    && apt-get purge -y --auto-remove bison ruby \
+    && make install \
+    && rm -r /usr/src/ruby
 
-    # Setup Rubygems
-    echo 'gem: --no-document' > /etc/gemrc && \
-    gem install bundler && gem update --system
+# skip installing gem documentation
+RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
+
+# install things globally, for great justice
+ENV GEM_HOME /usr/local/bundle
+ENV PATH $GEM_HOME/bin:$PATH
+RUN gem install bundler \
+    && bundle config --global path "$GEM_HOME" \
+    && bundle config --global bin "$GEM_HOME/bin"
+
+# don't create ".bundle" in all our apps
+ENV BUNDLE_APP_CONFIG $GEM_HOME
 
 
 # Install Node.js
