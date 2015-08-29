@@ -1,0 +1,9 @@
+#############################################################
+################### CHINA UBUNTU REPOS ###################
+#############################################################
+
+###### Ubuntu Main Repos
+deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse
+
+###### Ubuntu Update Repos
+deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse

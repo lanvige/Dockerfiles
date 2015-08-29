@@ -10,9 +10,6 @@ FROM phusion/baseimage:latest
 
 MAINTAINER Lanvige Jiang 'lanvige@gmail.com'
 
-# Replace with 163 source
-RUN echo "deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse" > /etc/apt/sources.list
-
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
@@ -22,10 +19,19 @@ CMD ["/sbin/my_init"]
 # Enable SSHD
 RUN rm -f /etc/service/sshd/down
 
+# Replace with 163 source
+RUN echo "deb http://mirrors.163.com/ubuntu/ trusty main restricted universe multiverse" > /etc/apt/sources.list
+RUN echo "deb http://mirrors.163.com/ubuntu/ trusty-security main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.163.com/ubuntu/ trusty-updates main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.163.com/ubuntu/ trusty-proposed main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.163.com/ubuntu/ trusty-backports main restricted universe multiverse" >> /etc/apt/sources.list
+RUN apt-get update
+
+
+# Install Ruby Dependency
+RUN apt-get update -q && sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
 
 # Use a version available on the Brightbox repo (https://www.brightbox.com/docs/ruby/ubuntu/)
-ENV RUBY_VERSION 2.2
-
 ENV RUBY_MAJOR 2.2
 ENV RUBY_VERSION 2.2.2
 
