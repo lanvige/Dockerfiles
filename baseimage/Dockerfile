@@ -11,12 +11,12 @@ MAINTAINER Lanvige Jiang, "lanvige@gmail.com", http://blog.lanvige.com
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 
-# apt config
+# APT config
 ADD sources.list /etc/apt/sources.list
 # Replace source to 163 for #thegreatwall
 # RUN echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" > /etc/apt/sources.lis
 
-
+# Install the dependency tool & libraries
 RUN apt-get update \
  && apt-get install --no-install-recommends -y software-properties-common \
  	  build-essential git-core sqlite3 locales curl zlib1g-dev \
@@ -26,3 +26,4 @@ RUN apt-get update \
  && locale-gen en_US.UTF-8 \
  && dpkg-reconfigure locales \
  && rm -rf /var/lib/apt/lists/*
+ 
