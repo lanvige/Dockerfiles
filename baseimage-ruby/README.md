@@ -14,3 +14,10 @@ $ sudo docker build -t="lanvige/ruby:2.2" .
 ```
 $ sudo docker run -it --name ruby_test lanvige/ruby:2.2
 ```
+
+
+## buildpack
+
+```
+$ sudo docker build -t="lanvige/ruby:buildpack" .
+```
