@@ -21,3 +21,15 @@ $ sudo docker run -it --name ruby_test lanvige/ruby:2.2
 ```
 $ sudo docker build -t="lanvige/ruby:buildpack" .
 ```
+
+
+
+```
+$ sudo docker run -it --name ruby_buildpack_test lanvige/ruby:buildpack
+```
+
+
+## REF::
+
+nodejs 
+https://github.com/nodesource/distributions

@@ -11,8 +11,9 @@ MAINTAINER Lanvige Jiang <lanvige@gmail.com>
 
 RUN add-apt-repository -y ppa:brightbox/ruby-ng \
  && add-apt-repository -y ppa:chris-lea/node.js \
- && apt-get update -q && apt-get install -yq nodejs 
+ && apt-get update -q && apt-get install -yq nodejs \
  && apt-get update \
  && apt-get install -y ruby2.2 nodejs \
  && gem install --no-document bundler \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

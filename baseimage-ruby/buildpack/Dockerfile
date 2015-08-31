@@ -11,10 +11,10 @@ MAINTAINER Lanvige Jiang <lanvige@gmail.com>
 
 # Ruby buildpack part
 # Install Node.js MySQL, PG, SQLite
-RUN add-apt-repository -y ppa:chris-lea/node.js \
+RUN curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash - \
  && apt-get update \
  && apt-get install -yq nodejs \
       mysql-client libmysqlclient-dev \
       postgresql-client sqlite3 \
- && apt-get clean
+ && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
